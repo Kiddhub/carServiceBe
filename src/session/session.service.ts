@@ -1,45 +1,45 @@
 import { Injectable } from '@nestjs/common';
-
-import { SessionRepository } from './infrastructure/persistence/session.repository';
-import { Session } from './domain/session';
-import { User } from '../users/domain/user';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DeepPartial, Not, Repository } from 'typeorm';
+import { Session } from './entities/session.entity';
 import { NullableType } from '../utils/types/nullable.type';
+import { FindOptions } from '../utils/find-options.type';
+import { Account } from '../account/entities/account.entity';
 
 @Injectable()
 export class SessionService {
-  constructor(private readonly sessionRepository: SessionRepository) {}
+  constructor(
+    @InjectRepository(Session)
+    private readonly sessionRepository: Repository<Session>,
+  ) {}
 
-  findById(id: Session['id']): Promise<NullableType<Session>> {
-    return this.sessionRepository.findById(id);
+  async findOne(options: FindOptions<Session>): Promise<NullableType<Session>> {
+    return this.sessionRepository.findOne({
+      where: options.where,
+    });
   }
 
-  create(
-    data: Omit<Session, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>,
-  ): Promise<Session> {
-    return this.sessionRepository.create(data);
+  async findMany(options: FindOptions<Session>): Promise<Session[]> {
+    return this.sessionRepository.find({
+      where: options.where,
+    });
   }
 
-  update(
-    id: Session['id'],
-    payload: Partial<
-      Omit<Session, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
-    >,
-  ): Promise<Session | null> {
-    return this.sessionRepository.update(id, payload);
+  async create(data: DeepPartial<Session>): Promise<Session> {
+    return this.sessionRepository.save(this.sessionRepository.create(data));
   }
 
-  deleteById(id: Session['id']): Promise<void> {
-    return this.sessionRepository.deleteById(id);
-  }
-
-  deleteByUserId(conditions: { userId: User['id'] }): Promise<void> {
-    return this.sessionRepository.deleteByUserId(conditions);
-  }
-
-  deleteByUserIdWithExclude(conditions: {
-    userId: User['id'];
-    excludeSessionId: Session['id'];
+  async softDelete({
+    excludeId,
+    ...criteria
+  }: {
+    id?: Session['id'];
+    account?: Pick<Account, 'id'>;
+    excludeId?: Session['id'];
   }): Promise<void> {
-    return this.sessionRepository.deleteByUserIdWithExclude(conditions);
+    await this.sessionRepository.softDelete({
+      ...criteria,
+      id: criteria.id ? criteria.id : excludeId ? Not(excludeId) : undefined,
+    });
   }
 }

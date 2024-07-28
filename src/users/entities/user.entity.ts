@@ -4,6 +4,7 @@ import {
   DeleteDateColumn,
   Entity,
   Index,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -11,6 +12,7 @@ import {
 import { EntityHelper } from '../../utils/entity-helper';
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '../../roles/entities/role.entity';
+import { Account } from '../../account/entities/account.entity';
 
 @Entity()
 export class User extends EntityHelper {
@@ -26,7 +28,8 @@ export class User extends EntityHelper {
   dob: Date;
 
   @ApiProperty()
-  @OneToOne(() => Role, { eager: true })
+  @OneToOne(() => Role)
+  @JoinColumn({ name: 'roleId' })
   role: Role;
 
   @ApiProperty()
@@ -43,9 +46,15 @@ export class User extends EntityHelper {
   @Index()
   phone: string;
 
-  @ApiProperty()
-  @ApiProperty({ type: Number, nullable: true })
-  accountId: number;
+  // @ApiProperty()
+  // @Column({ type: Number, nullable: true })
+  // accountId: number;
+
+  @ApiProperty({ type: () => Account })
+  @OneToOne(() => Account, (account) => account.user)
+  // @JoinColumn({ name: 'accountId' }) // Đảm bảo rằng bạn có cột join
+  account: Account;
+
   @ApiProperty()
   @CreateDateColumn()
   createdAt: Date;

@@ -19,7 +19,7 @@ export class Role extends EntityHelper {
   @Allow()
   @ApiProperty({ example: 'Admin' })
   @Column()
-  name: string;
+  name?: string;
   @ApiProperty()
   @CreateDateColumn()
   createdAt: Date;

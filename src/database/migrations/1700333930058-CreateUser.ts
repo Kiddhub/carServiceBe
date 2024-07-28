@@ -12,7 +12,6 @@ export class CreateUser1700333930058 implements MigrationInterface {
       "roleId" integer NOT NULL,
       "email" character varying NOT NULL,
       "phone" character varying NOT NULL,
-      "accountId" integer NOT NULL,
       "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
       "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
       "deletedAt" TIMESTAMP,
@@ -23,9 +22,6 @@ export class CreateUser1700333930058 implements MigrationInterface {
     );
     await queryRunner.query(
       `CREATE INDEX "IDX_3e4b8e70c4519dabf6b2f5e2f2" ON "user" ("phone") `,
-    );
-    await queryRunner.query(
-      `CREATE INDEX "IDX_3d2f174ef04fb312fdebd0aac9" ON "user" ("name") `,
     );
   }
 

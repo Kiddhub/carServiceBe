@@ -14,13 +14,13 @@ export class CreateRole1712569933853 implements MigrationInterface {
       CONSTRAINT "PK_cace4a159ff9f2512ee42373760" PRIMARY KEY ("id"));`,
     );
     await queryRunner.query(
-      `ALTER TABLE "user" ADD CONSTRAINT "FK_3d2f174ef04fb312fdebd0ddc9" FOREIGN KEY ("roleId") REFERENCES "role"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
+      `ALTER TABLE "user" ADD CONSTRAINT "FK_3d2f174ef04fb312fdebd0aac9" FOREIGN KEY ("roleId") REFERENCES "role"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `DROP INDEX "public"."FK_3d2f174ef04fb312fdebd0ddc9"`,
+      `DROP INDEX "public"."FK_3d2f174ef04fb312fdebd0aac9"`,
     );
     await queryRunner.query(`DROP TABLE "role"`);
   }

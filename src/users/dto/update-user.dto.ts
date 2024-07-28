@@ -13,7 +13,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @Transform(lowerCaseTransformer)
   @IsOptional()
   @IsEmail()
-  email?: string | null;
+  email?: string;
 
   @ApiPropertyOptional()
   @IsOptional()

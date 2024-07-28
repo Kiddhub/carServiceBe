@@ -1,25 +1,15 @@
 import { Module } from '@nestjs/common';
 
 import { UsersController } from './users.controller';
-
-import { UsersService } from './users.service';
-import { DocumentUserPersistenceModule } from './infrastructure/persistence/document/document-persistence.module';
-import { RelationalUserPersistenceModule } from './infrastructure/persistence/relational/relational-persistence.module';
-import { DatabaseConfig } from '../database/config/database-config.type';
-import databaseConfig from '../database/config/database.config';
 import { FilesModule } from '../files/files.module';
-
-// <database-block>
-const infrastructurePersistenceModule = (databaseConfig() as DatabaseConfig)
-  .isDocumentDatabase
-  ? DocumentUserPersistenceModule
-  : RelationalUserPersistenceModule;
-// </database-block>
+import { UsersService } from './users.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
 
 @Module({
-  imports: [infrastructurePersistenceModule, FilesModule],
+  imports: [FilesModule, TypeOrmModule.forFeature([User])],
   controllers: [UsersController],
   providers: [UsersService],
-  exports: [UsersService, infrastructurePersistenceModule],
+  exports: [UsersService],
 })
 export class UsersModule {}
