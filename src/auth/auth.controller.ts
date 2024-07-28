@@ -1,4 +1,14 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, SerializeOptions } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  SerializeOptions,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { Account } from '../account/entities/account.entity';
@@ -6,6 +16,7 @@ import { AuthRegisterDto } from './dto/auth-register.dto';
 import { NullableType } from '../utils/types/nullable.type';
 import { AuthLoginDto } from './dto/auth-login.dto';
 import { LoginResponseType } from './types/login-response.type';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Auth')
 @Controller({
@@ -31,5 +42,14 @@ export class AuthController {
     @Body() register: AuthRegisterDto,
   ): Promise<NullableType<Account>> {
     return this.service.register(register);
+  }
+  @Get('/me')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ description: '', type: 'any' })
+  public async me(@Request() request): Promise<NullableType<any>> {
+    const user = await this.service.me(request.user);
+
+    return user;
   }
 }

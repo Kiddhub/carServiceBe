@@ -54,6 +54,17 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
     }
+    if (!bcrypt.compareSync(loginDto.password, account.password)) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          errors: {
+            walletAddress: 'password is not correct',
+          },
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     const session = await this.sessionService.create({
       account,
     });
@@ -74,6 +85,7 @@ export class AuthService {
     const account = await this.accountService.findOne({
       id: userJwtPayload.id,
     });
+    console.log('ACCCCCOUNTTTTTT', account);
     if (!account) {
       throw new HttpException(
         {
