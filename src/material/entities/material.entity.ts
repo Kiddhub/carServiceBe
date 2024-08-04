@@ -9,23 +9,30 @@ import {
 } from 'typeorm';
 import { EntityHelper } from '../../utils/entity-helper';
 import { ApiProperty } from '@nestjs/swagger';
-
 @Entity()
-export class Account extends EntityHelper {
+export class Material extends EntityHelper {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
   @ApiProperty()
+  @Column({ type: String, nullable: false })
   @Index()
-  @Column({ type: String, nullable: false, unique: true })
-  phone: string;
+  name: string;
   @ApiProperty()
   @Column({ type: String, nullable: false })
-  password: string;
-
+  importPrice: string;
+  @ApiProperty()
+  @Column({ type: String, nullable: false })
+  exportPrice: string;
+  @ApiProperty()
   @Column({ type: Number, nullable: false })
-  userId: number;
-
+  importQuantity: number;
+  @ApiProperty()
+  @Column({ type: Number, nullable: false })
+  exportQuantity: number;
+  @ApiProperty()
+  @Column({ type: String, nullable: false })
+  groupServiceCode: string;
   @ApiProperty()
   @CreateDateColumn()
   createdAt: Date;

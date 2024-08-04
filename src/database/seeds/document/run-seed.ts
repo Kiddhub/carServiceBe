@@ -1,5 +1,4 @@
 import { NestFactory } from '@nestjs/core';
-import { UserSeedService } from './user/user-seed.service';
 
 import { SeedModule } from './seed.module';
 

@@ -28,7 +28,6 @@ export class AccountService {
   findOne(fields: EntityCondition<Account>): Promise<NullableType<Account>> {
     return this.accountRepository.findOne({
       where: fields,
-      relations: ['user'],
     });
   }
 

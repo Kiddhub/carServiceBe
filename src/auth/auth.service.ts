@@ -8,7 +8,6 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../users/users.service';
 import { AllConfigType } from '../config/config.type';
-import { MailService } from '../mail/mail.service';
 import { SessionService } from '../session/session.service';
 import { AccountService } from '../account/account.service';
 import { AuthLoginDto } from './dto/auth-login.dto';
@@ -35,7 +34,6 @@ export class AuthService {
     private usersService: UsersService,
     private accountService: AccountService,
     private sessionService: SessionService,
-    private mailService: MailService,
     private configService: ConfigService<AllConfigType>,
   ) {}
 
@@ -48,7 +46,7 @@ export class AuthService {
         {
           status: HttpStatus.BAD_REQUEST,
           errors: {
-            walletAddress: 'account is not exist',
+            account: 'account is not exist',
           },
         },
         HttpStatus.BAD_REQUEST,
@@ -59,21 +57,37 @@ export class AuthService {
         {
           status: HttpStatus.BAD_REQUEST,
           errors: {
-            walletAddress: 'password is not correct',
+            password: 'password is not correct',
           },
         },
         HttpStatus.BAD_REQUEST,
       );
     }
+
+    const user = await this.usersService.findOne({
+      id: account.userId,
+    });
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          errors: {
+            user: 'user is not exist',
+          },
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const session = await this.sessionService.create({
-      account,
+      accountId: account.id,
     });
     const { token, refreshToken, tokenExpires } = await this.getTokensData({
       id: account.id,
       phone: account.phone,
       sessionId: session.id,
-      role: account.user.role,
-      user: account.user,
+      role: user.roleId,
+      user: user,
     });
     return {
       refreshToken,
@@ -82,6 +96,7 @@ export class AuthService {
     };
   }
   async me(userJwtPayload: JwtPayloadType): Promise<NullableType<any>> {
+    console.log('userJwtPayload', userJwtPayload);
     const account = await this.accountService.findOne({
       id: userJwtPayload.id,
     });
@@ -91,14 +106,28 @@ export class AuthService {
         {
           status: HttpStatus.BAD_REQUEST,
           errors: {
-            walletAddress: 'account is not exist',
+            account: 'account is not exist',
+          },
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const user = await this.usersService.findOne({
+      id: account.userId,
+    });
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          errors: {
+            user: 'user is not exist',
           },
         },
         HttpStatus.BAD_REQUEST,
       );
     }
     return {
-      ...account.user,
+      ...user,
     };
   }
   async refreshToken(
@@ -114,12 +143,44 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
+    const account = await this.accountService.findOne({
+      id: session.accountId,
+    });
+
+    if (!account) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          errors: {
+            account: 'account is not exist',
+          },
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const user = await this.usersService.findOne({
+      id: account.userId,
+    });
+
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          errors: {
+            user: 'user is not exist',
+          },
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const { token, refreshToken, tokenExpires } = await this.getTokensData({
-      id: session.account.id,
-      phone: session.account.phone,
+      id: account.id,
+      phone: account.phone,
       sessionId: session.id,
-      role: session.account.user.role,
-      user: session.account.user,
+      role: user.roleId,
+      user: user,
     });
 
     return {
@@ -156,7 +217,7 @@ export class AuthService {
           {
             status: HttpStatus.BAD_REQUEST,
             errors: {
-              walletAddress: 'Account is exist',
+              account: 'Account is exist',
             },
           },
           HttpStatus.BAD_REQUEST,
@@ -186,10 +247,6 @@ export class AuthService {
     });
   }
 
-  // async softDelete(user: User): Promise<void> {
-  //   await this.usersService.softDelete(user.id);
-  // }
-
   async logout(data: Pick<JwtRefreshPayloadType, 'sessionId'>) {
     return this.sessionService.softDelete({
       id: data.sessionId,
@@ -199,7 +256,7 @@ export class AuthService {
     id: Account['id'];
     phone: Account['phone'];
     sessionId: Session['id'];
-    role: User['role'];
+    role: User['roleId'];
     user: User;
   }) {
     const tokenExpiresIn = this.configService.getOrThrow('auth.expires', {
