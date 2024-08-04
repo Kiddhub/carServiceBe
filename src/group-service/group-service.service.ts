@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateGroupServiceDto } from './dto/create-group-service.dto';
 import { UpdateGroupServiceDto } from './dto/update-group-service.dto';
 import { InjectEntityManager } from '@nestjs/typeorm';
@@ -21,10 +21,10 @@ export class GroupServiceService {
   async create(createGroupServiceDto: CreateGroupServiceDto) {
     return await this.entityManager.transaction(async (manager) => {
       try {
-        const groupService = await manager.findBy(GroupService, {
-          key: createGroupServiceDto.key,
+        const groupService = await manager.findOne(GroupService, {
+          where: { key: createGroupServiceDto.key },
         });
-        if (groupService) {
+        if (groupService !== null) {
           throwCustomException('Group service already exists');
         }
         const newGroupService = manager.create(
@@ -37,7 +37,8 @@ export class GroupServiceService {
           throwCustomException(error.message);
         } else {
           throwCustomException(
-            'An error occurred while creating group service',
+            'An error occurred while creating group service:' +
+              error.response?.errors,
           );
         }
       }
@@ -66,17 +67,35 @@ export class GroupServiceService {
         });
         if (!groupService) {
           throwCustomException('Group service not found');
+        } else if (updateGroupServiceDto.key) {
+          const groupServiceKey = await manager.findOne(GroupService, {
+            where: { key: updateGroupServiceDto.key },
+          });
+          if (groupServiceKey && groupServiceKey.id !== id) {
+            throw new HttpException(
+              {
+                errors: {
+                  key: 'Key already exists',
+                },
+              },
+              400,
+            );
+          }
         } else {
           manager.merge(GroupService, groupService, updateGroupServiceDto);
           return await manager.save(groupService);
         }
       } catch (error) {
-        if (error instanceof QueryFailedError) {
-          throwCustomException(error.message);
+        if (error instanceof HttpException) {
+          throw error;
         } else {
-          throwCustomException(
-            'An error occurred while updating group service',
-            error.message,
+          throw new HttpException(
+            {
+              errors: {
+                message: 'Internal server error',
+              },
+            },
+            500,
           );
         }
       }
@@ -96,29 +115,34 @@ export class GroupServiceService {
   }): Promise<[GroupService[], number]> {
     const queryBuilder = this.entityManager.createQueryBuilder(
       GroupService,
-      'groupService',
+      'group_service',
     );
+    console.log('filterOptions', filterOptions);
     if (filterOptions?.key) {
-      queryBuilder.where('groupService.key = :key', { key: filterOptions.key });
+      queryBuilder.where('group_service.key = :key', {
+        key: filterOptions.key,
+      });
     } else if (filterOptions?.status) {
-      queryBuilder.where('groupService.status = :status', {
+      queryBuilder.where('group_service.status = :status', {
         status: filterOptions.status,
       });
     }
     // Search
     if (searchText) {
-      queryBuilder.where('groupService.key LIKE :searchText', {
+      queryBuilder.where('group_service.key LIKE :searchText', {
         searchText: `%${searchText.toUpperCase()}%`,
       });
     }
 
     // Sort
-    if (sortOptions && sortOptions?.length > 0) {
+    if (sortOptions && sortOptions.length > 0) {
       sortOptions.forEach((sort: any) => {
-        queryBuilder.orderBy(
-          `groupService.${sort.orderBy}`,
-          sort.order.toUpperCase(),
-        );
+        if (sort.orderBy && sort.order) {
+          queryBuilder.orderBy(
+            `group_service.${sort.orderBy}`,
+            sort.order.toUpperCase() as 'ASC' | 'DESC',
+          );
+        }
       });
     }
 

@@ -3,11 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UseGuards,
   Query,
+  Put,
 } from '@nestjs/common';
 import { GroupServiceService } from './group-service.service';
 import { CreateGroupServiceDto } from './dto/create-group-service.dto';
@@ -52,17 +52,12 @@ export class GroupServiceController {
     );
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.groupServiceService.findOne(+id);
-  }
-
-  @Patch(':id')
+  @Put(':id')
   update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateGroupServiceDto: UpdateGroupServiceDto,
   ) {
-    return this.groupServiceService.update(+id, updateGroupServiceDto);
+    return this.groupServiceService.update(id, updateGroupServiceDto);
   }
 
   @Delete(':id')
