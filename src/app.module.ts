@@ -7,11 +7,9 @@ import authConfig from './auth/config/auth.config';
 import appConfig from './config/app.config';
 import mailConfig from './mail/config/mail.config';
 import fileConfig from './files/config/file.config';
-
 import path from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
 import { I18nModule } from 'nestjs-i18n/dist/i18n.module';
 import { HeaderResolver } from 'nestjs-i18n';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
@@ -25,6 +23,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MongooseConfigService } from './database/mongoose-config.service';
 import { DatabaseConfig } from './database/config/database-config.type';
 import { AccountModule } from './account/account.module';
+import { GroupServiceModule } from './group-service/group-service.module';
+import { ServiceModule } from './service/service.module';
+import { MaterialModule } from './material/material.module';
 
 // <database-block>
 const infrastructureDatabaseModule = (databaseConfig() as DatabaseConfig)
@@ -80,6 +81,9 @@ const infrastructureDatabaseModule = (databaseConfig() as DatabaseConfig)
     MailerModule,
     HomeModule,
     AccountModule,
+    GroupServiceModule,
+    ServiceModule,
+    MaterialModule,
   ],
 })
 export class AppModule {}

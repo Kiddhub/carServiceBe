@@ -5,20 +5,20 @@ import {
   Index,
   CreateDateColumn,
   DeleteDateColumn,
+  Column,
 } from 'typeorm';
 import { EntityHelper } from '../../utils/entity-helper';
-import { Account } from '../../account/entities/account.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class Session extends EntityHelper {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Account, {
-    eager: true,
-  })
   @Index()
-  account: Account;
+  @ApiProperty()
+  @Column({ type: String, nullable: false, unique: true })
+  accountId: number;
 
   @CreateDateColumn()
   createdAt: Date;

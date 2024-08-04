@@ -11,27 +11,32 @@ import { EntityHelper } from '../../utils/entity-helper';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
-export class Account extends EntityHelper {
+export class GroupService extends EntityHelper {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
+
   @ApiProperty()
   @Index()
   @Column({ type: String, nullable: false, unique: true })
-  phone: string;
+  key: string;
+
   @ApiProperty()
   @Column({ type: String, nullable: false })
-  password: string;
+  value: string;
 
-  @Column({ type: Number, nullable: false })
-  userId: number;
+  @ApiProperty()
+  @Column({ type: String, nullable: false })
+  status: string;
 
   @ApiProperty()
   @CreateDateColumn()
   createdAt: Date;
+
   @ApiProperty()
   @UpdateDateColumn()
   updatedAt: Date;
+
   @ApiProperty()
   @DeleteDateColumn()
   deletedAt: Date;

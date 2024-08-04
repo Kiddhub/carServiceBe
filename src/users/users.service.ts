@@ -25,7 +25,6 @@ export class UsersService {
     try {
       const res = await this.usersRepository.findOne({
         where: fields,
-        relations: ['account', 'role'],
       });
       console.log('Result:', res);
       return res;

@@ -49,7 +49,6 @@ export class AuthController {
   @ApiOkResponse({ description: '', type: 'any' })
   public async me(@Request() request): Promise<NullableType<any>> {
     const user = await this.service.me(request.user);
-
     return user;
   }
 }
