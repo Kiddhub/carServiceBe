@@ -100,7 +100,6 @@ export class AuthService {
     const account = await this.accountService.findOne({
       id: userJwtPayload.id,
     });
-    console.log('ACCCCCOUNTTTTTT', account);
     if (!account) {
       throw new HttpException(
         {

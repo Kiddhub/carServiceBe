@@ -12,6 +12,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class Session extends EntityHelper {
+  @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,9 +21,11 @@ export class Session extends EntityHelper {
   @Column({ type: String, nullable: false, unique: true })
   accountId: number;
 
+  @ApiProperty()
   @CreateDateColumn()
   createdAt: Date;
 
+  @ApiProperty()
   @DeleteDateColumn()
   deletedAt: Date;
 }

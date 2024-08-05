@@ -19,7 +19,6 @@ import { RoleEnum } from '../roles/roles.enum';
 import { QueryServiceDto } from './dto/query-service.dto';
 import { infinityAndCountPagination } from '../utils/infinity-pagination';
 
-@Controller('service')
 @ApiTags('Service')
 @Controller({
   path: 'service',

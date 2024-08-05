@@ -20,6 +20,9 @@ export class Material extends EntityHelper {
   name: string;
   @ApiProperty()
   @Column({ type: String, nullable: false })
+  description: string;
+  @ApiProperty()
+  @Column({ type: String, nullable: false })
   importPrice: string;
   @ApiProperty()
   @Column({ type: String, nullable: false })

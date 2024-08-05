@@ -8,6 +8,7 @@ export class CreateMaterial1712738375998 implements MigrationInterface {
       `CREATE TABLE "material" (
       "id" SERIAL NOT NULL,
       "name" character varying NOT NULL,
+      "description" character varying NOT NULL,
       "importPrice" character varying NOT NULL,
       "exportPrice" character varying NOT NULL,
       "importQuantity" integer NOT NULL,
