@@ -26,6 +26,7 @@ import { AccountModule } from './account/account.module';
 import { GroupServiceModule } from './group-service/group-service.module';
 import { ServiceModule } from './service/service.module';
 import { MaterialModule } from './material/material.module';
+import { UserCarModule } from './user-car/user-car.module';
 
 // <database-block>
 const infrastructureDatabaseModule = (databaseConfig() as DatabaseConfig)
@@ -84,6 +85,7 @@ const infrastructureDatabaseModule = (databaseConfig() as DatabaseConfig)
     GroupServiceModule,
     ServiceModule,
     MaterialModule,
+    UserCarModule,
   ],
 })
 export class AppModule {}

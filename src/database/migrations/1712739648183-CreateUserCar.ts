@@ -22,7 +22,7 @@ export class CreateUserCar1712739648183 implements MigrationInterface {
   }
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `DROP INDEX "public"."IDX_3d2f174ef04fb312fdebd0ggc9"`,
+      `DROP INDEX "public"."IDX_3d2f174ef04fb312fdebd0hhc9"`,
     );
     await queryRunner.query(`DROP TABLE "user_car"`);
   }
