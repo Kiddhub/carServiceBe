@@ -12,7 +12,7 @@ import { HistoryCar } from '../entities/history-car.entity';
 export class FilterHistoryCarDto {
   @ApiProperty()
   @IsOptional()
-  carId?: string;
+  plateNumber?: string;
   @ApiProperty()
   @IsOptional()
   checkIn?: Date;

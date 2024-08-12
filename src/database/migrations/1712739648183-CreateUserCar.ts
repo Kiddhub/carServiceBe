@@ -7,12 +7,12 @@ export class CreateUserCar1712739648183 implements MigrationInterface {
     await queryRunner.query(
       `CREATE TABLE "user_car" (
       "id" SERIAL NOT NULL,
-      "mode" character varying NOT NULL,
-      "plateNumber" character varying NOT NULL,
-      "color" character varying NOT NULL,
-      "userId" integer NOT NULL,
-      "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
-      "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
+      "mode" character varying ,
+      "plateNumber" character varying,
+      "color" character varying ,
+      "userId" integer ,
+      "createdAt" TIMESTAMP DEFAULT now(),
+      "updatedAt" TIMESTAMP  DEFAULT now(),
       "deletedAt" TIMESTAMP,
       CONSTRAINT "PK_cace4a159ff9f2512ii42373760" PRIMARY KEY ("id"));`,
     );

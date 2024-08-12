@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Request,
@@ -17,7 +16,7 @@ import { UpdateUserCarDto } from './dto/update-user-car.dto';
 import { infinityAndCountPagination } from '../utils/infinity-pagination';
 import { QueryUserCarDto } from './dto/query-user-car.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../roles/roles.decorator';
 import { RoleEnum } from '../roles/roles.enum';
 
@@ -27,6 +26,7 @@ import { RoleEnum } from '../roles/roles.enum';
   version: '1',
 })
 @UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
 export class UserCarController {
   constructor(private readonly userCarService: UserCarService) {}
 

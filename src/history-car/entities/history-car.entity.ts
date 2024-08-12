@@ -3,7 +3,6 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -17,11 +16,17 @@ export class HistoryCar extends EntityHelper {
   id: number;
   @ApiProperty()
   @Column({ type: String, nullable: false })
-  carId: string;
+  plateNumber: string;
+  @ApiProperty()
+  @Column({ type: Number, nullable: false })
+  userId: number;
   @ApiProperty()
   checkIn: Date;
   @ApiProperty()
   checkOut: Date;
+  @ApiProperty()
+  @Column({ type: String })
+  status: string;
   @ApiProperty()
   @CreateDateColumn()
   createdAt: Date;

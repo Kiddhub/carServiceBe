@@ -7,13 +7,13 @@ export class CreateUser1700333930058 implements MigrationInterface {
     await queryRunner.query(
       `CREATE TABLE "user" (
       "id" SERIAL NOT NULL,
-      "name" character varying NOT NULL,
-      "dob" TIMESTAMP NOT NULL,
-      "roleId" integer NOT NULL,
-      "email" character varying NOT NULL,
-      "phone" character varying NOT NULL,
-      "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
-      "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
+      "name" character varying ,
+      "dob" TIMESTAMP,
+      "roleId" integer,
+      "email" character varying ,
+      "phone" character varying ,
+      "createdAt" TIMESTAMP DEFAULT now(),
+      "updatedAt" TIMESTAMP DEFAULT now(),
       "deletedAt" TIMESTAMP,
       CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"));`,
     );

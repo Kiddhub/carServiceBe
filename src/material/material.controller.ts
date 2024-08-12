@@ -12,7 +12,7 @@ import {
 import { MaterialService } from './material.service';
 import { CreateMaterialDto } from './dto/create-material.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../roles/roles.decorator';
 import { RoleEnum } from '../roles/roles.enum';
@@ -26,6 +26,7 @@ import { infinityAndCountPagination } from '../utils/infinity-pagination';
 })
 @UseGuards(AuthGuard('jwt'))
 @Roles(RoleEnum.Admin)
+@ApiBearerAuth()
 export class MaterialController {
   constructor(private readonly materialService: MaterialService) {}
 

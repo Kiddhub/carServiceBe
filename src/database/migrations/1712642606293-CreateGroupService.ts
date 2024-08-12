@@ -7,11 +7,11 @@ export class CreateGroupService1712642606293 implements MigrationInterface {
     await queryRunner.query(
       `CREATE TABLE "group_service" (
       "id" SERIAL NOT NULL,
-      "key" character varying NOT NULL,
-      "value" character varying NOT NULL,
-      "status" character varying NOT NULL,
-      "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
-      "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
+      "key" character varying ,
+      "value" character varying ,
+      "status" character varying ,
+      "createdAt" TIMESTAMP DEFAULT now(),
+      "updatedAt" TIMESTAMP DEFAULT now(),
       "deletedAt" TIMESTAMP,
       CONSTRAINT "PK_cace4a159ff9f2512ff42373760" PRIMARY KEY ("id"));`,
     );
@@ -21,11 +21,11 @@ export class CreateGroupService1712642606293 implements MigrationInterface {
     await queryRunner.query(
       `CREATE TABLE "service" (
       "id" SERIAL NOT NULL,
-      "groupServiceCode" character varying NOT NULL,
-      "name" character varying NOT NULL,
-      "description" character varying NOT NULL,
-      "createdAt" TIMESTAMP NOT NULL DEFAULT now(), 
-      "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
+      "groupServiceCode" character varying ,
+      "name" character varying ,
+      "description" character varying ,
+      "createdAt" TIMESTAMP DEFAULT now(), 
+      "updatedAt" TIMESTAMP DEFAULT now(),
       "deletedAt" TIMESTAMP, 
       CONSTRAINT "PK_cace4a159ff9f2512gg42373760" PRIMARY KEY ("id"));`,
     );

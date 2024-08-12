@@ -14,7 +14,7 @@ import { CreateGroupServiceDto } from './dto/create-group-service.dto';
 import { UpdateGroupServiceDto } from './dto/update-group-service.dto';
 import { Roles } from '../roles/roles.decorator';
 import { RoleEnum } from '../roles/roles.enum';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { QueryGroupServiceDto } from './dto/query-group-service.dto';
 import { infinityAndCountPagination } from '../utils/infinity-pagination';
@@ -26,6 +26,7 @@ import { infinityAndCountPagination } from '../utils/infinity-pagination';
 })
 @Roles(RoleEnum.Admin)
 @UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
 export class GroupServiceController {
   constructor(private readonly groupServiceService: GroupServiceService) {}
 

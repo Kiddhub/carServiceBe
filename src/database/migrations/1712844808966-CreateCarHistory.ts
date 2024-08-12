@@ -7,9 +7,11 @@ export class CreateCarHistory1712844808966 implements MigrationInterface {
     await queryRunner.query(
       `CREATE TABLE "car_history" (
       "id" SERIAL NOT NULL,
-      "carId" character varying NOT NULL,
-      "checkIn" TIMESTAMP NOT NULL,
+      "plateNumber" character varying,
+      "userId" integer,
+      "checkIn" TIMESTAMP ,
       "checkOut" TIMESTAMP,
+      "status" character varying,
       "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
       "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
       "deletedAt" TIMESTAMP,

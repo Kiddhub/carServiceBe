@@ -4,5 +4,5 @@ import { IsString } from 'class-validator';
 export class CreateHistoryCarDto {
   @ApiProperty()
   @IsString()
-  carId: string;
+  plateNumber: string;
 }

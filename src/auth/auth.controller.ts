@@ -9,7 +9,7 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { Account } from '../account/entities/account.entity';
 import { AuthRegisterDto } from './dto/auth-register.dto';
@@ -44,6 +44,7 @@ export class AuthController {
     return this.service.register(register);
   }
   @Get('/me')
+  @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: '', type: 'any' })

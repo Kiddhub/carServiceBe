@@ -7,11 +7,11 @@ export class CreateAccount1712571991659 implements MigrationInterface {
     await queryRunner.query(
       `CREATE TABLE "account" (
       "id" SERIAL NOT NULL,
-      "phone" character varying NOT NULL,
-      "password" character varying NOT NULL,
+      "phone" character varying ,
+      "password" character varying ,
       "userId" integer,
-      "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
-      "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
+      "createdAt" TIMESTAMP  DEFAULT now(),
+      "updatedAt" TIMESTAMP  DEFAULT now(),
       "deletedAt" TIMESTAMP,
       CONSTRAINT "PK_cace4a159ff9f2512aa42373760" PRIMARY KEY ("id"));`,
     );
@@ -21,7 +21,7 @@ export class CreateAccount1712571991659 implements MigrationInterface {
     await queryRunner.query(
       `CREATE TABLE "session" (
       "id" SERIAL NOT NULL, 
-      "createdAt" TIMESTAMP NOT NULL DEFAULT now(), 
+      "createdAt" TIMESTAMP DEFAULT now(), 
       "deletedAt" TIMESTAMP, 
       "accountId" integer, 
       CONSTRAINT "PK_cace4a159ff9f2512bb42373760" PRIMARY KEY ("id"));`,
